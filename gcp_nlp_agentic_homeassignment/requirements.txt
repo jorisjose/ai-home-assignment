@@ -1,0 +1,24 @@
+google-cloud-language==2.13.4
+google-cloud-storage==2.18.2
+google-cloud-aiplatform==1.69.0
+# Use a pandas with Python 3.13 wheels
+pandas==2.2.3
+# NumPy 2.x for Python 3.13 compatibility
+numpy>=2.0,<3.0
+python-dotenv==1.0.1
+tqdm==4.66.5
+sumy==0.11.0
+google-generativeai==0.7.2
+reportlab==4.2.5
+langchain==0.3.13
+langgraph==0.2.42
+langchain-google-genai==2.0.7
+# SVG → PDF/PNG conversion for diagrams
+svglib==1.5.1
+# Optional vector store for local memory (may not be available on all Python versions)
+# faiss-cpu optional; install manually if your Python has wheels
+# faiss-cpu>=1.11.0
+# Optional / dev (uncomment if needed)
+# spacy==3.7.5
+# pytest==8.2.2
+# matplotlib==3.8.4

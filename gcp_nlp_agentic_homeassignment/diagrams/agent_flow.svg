@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <style>
+    .box { fill: #ffffff; stroke: #333333; stroke-width: 2; rx: 10; ry: 10; }
+    .title { font: bold 18px Segoe UI, Arial, sans-serif; fill: #111111; }
+    .text { font: 14px Segoe UI, Arial, sans-serif; fill: #222222; }
+    .small { font: 12px Segoe UI, Arial, sans-serif; fill: #444444; }
+    .arrow { stroke: #555555; stroke-width: 2; marker-end: url(#arrow); fill: none; }
+    .lane { fill: #f6f8fa; stroke: #e0e0e0; }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 z" fill="#555" />
+    </marker>
+  </defs>
+
+  <!-- Swimlanes -->
+  <rect class="lane" x="30" y="60" width="1140" height="160" />
+  <text class="small" x="40" y="80">Retrieval</text>
+  <rect class="lane" x="30" y="240" width="1140" height="200" />
+  <text class="small" x="40" y="260">Per‑Document Analysis</text>
+  <rect class="lane" x="30" y="460" width="1140" height="190" />
+  <text class="small" x="40" y="480">Synthesis & Persistence</text>
+
+  <!-- Title -->
+  <text class="title" x="30" y="36">Agent Flow: Retrieve → Analyze → Synthesize (with Fallbacks & Memory)</text>
+
+  <!-- Start & Query -->
+  <rect class="box" x="60" y="90" width="220" height="60" />
+  <text class="text" x="70" y="120">Start + User Query</text>
+  <text class="small" x="70" y="140">State: { query }</text>
+
+  <!-- Retrieval: Keyword -->
+  <rect class="box" x="320" y="90" width="260" height="60" />
+  <text class="text" x="330" y="120">Keyword Retrieval (DF)</text>
+  <text class="small" x="330" y="140">Regex match score → top‑k</text>
+
+  <!-- Retrieval: FAISS optional -->
+  <rect class="box" x="620" y="90" width="260" height="60" />
+  <text class="text" x="630" y="120">FAISS Retrieval (optional)</text>
+  <text class="small" x="630" y="140">Embeddings: Gemini</text>
+
+  <!-- Merge/Dedup -->
+  <rect class="box" x="920" y="90" width="220" height="60" />
+  <text class="text" x="930" y="120">Merge & Dedup</text>
+  <text class="small" x="930" y="140">Candidates[≤5]</text>
+
+  <!-- Arrows Retrieval -->
+  <line class="arrow" x1="280" y1="120" x2="320" y2="120" />
+  <line class="arrow" x1="580" y1="120" x2="620" y2="120" />
+  <line class="arrow" x1="880" y1="120" x2="920" y2="120" />
+
+  <!-- Per-doc: Entities -->
+  <rect class="box" x="140" y="290" width="260" height="70" />
+  <text class="text" x="150" y="320">GCP Language v2: Entities</text>
+  <text class="small" x="150" y="340">name, type (v2 may omit salience)</text>
+
+  <!-- Per-doc: Sentiment -->
+  <rect class="box" x="440" y="290" width="260" height="70" />
+  <text class="text" x="450" y="320">GCP Language v2: Sentiment</text>
+  <text class="small" x="450" y="340">document score, magnitude</text>
+
+  <!-- Per-doc: Summarize with fallbacks -->
+  <rect class="box" x="740" y="290" width="360" height="70" />
+  <text class="text" x="750" y="318">Summarize (≤10 words, no ellipsis)</text>
+  <text class="small" x="750" y="338">Gemini via API key → Vertex → Local</text>
+
+  <!-- Arrows to per-doc -->
+  <line class="arrow" x1="1030" y1="150" x2="1030" y2="290" />
+  <line class="arrow" x1="1030" y1="325" x2="700" y2="325" />
+  <line class="arrow" x1="700" y1="325" x2="400" y2="325" />
+  <line class="arrow" x1="400" y1="325" x2="140" y2="325" />
+
+  <!-- Synthesis: Join summaries -->
+  <rect class="box" x="100" y="520" width="360" height="70" />
+  <text class="text" x="110" y="548">Synthesize Final Answer</text>
+  <text class="small" x="110" y="568">Join per‑doc summaries → concise answer</text>
+
+  <!-- Persistence: FAISS upsert -->
+  <rect class="box" x="500" y="520" width="300" height="70" />
+  <text class="text" x="510" y="548">Upsert Support → FAISS</text>
+  <text class="small" x="510" y="568">page_content + metadata</text>
+
+  <!-- Persistence: BigQuery log -->
+  <rect class="box" x="840" y="520" width="300" height="70" />
+  <text class="text" x="850" y="548">Log Run → BigQuery</text>
+  <text class="small" x="850" y="568">ts, query, answer, support(JSON)</text>
+
+  <!-- Arrows Analysis→Synthesis/Persistence -->
+  <line class="arrow" x1="920" y1="360" x2="920" y2="520" />
+  <line class="arrow" x1="920" y1="555" x2="820" y2="555" />
+  <line class="arrow" x1="460" y1="555" x2="500" y2="555" />
+
+  <!-- Return Answer -->
+  <rect class="box" x="480" y="630" width="240" height="60" />
+  <text class="text" x="490" y="660">Return Answer + Support</text>
+
+  <line class="arrow" x1="280" y1="590" x2="480" y2="660" />
+  <line class="arrow" x1="650" y1="590" x2="600" y2="660" />
+  <line class="arrow" x1="990" y1="590" x2="720" y2="660" />
+
+  <!-- Error handling note -->
+  <text class="small" x="60" y="760">Errors are captured per step; agent continues with available signals (graceful degradation).</text>
+</svg>
